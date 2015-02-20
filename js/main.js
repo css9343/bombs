@@ -9,6 +9,7 @@ var targetY;
 var bombs = [];
 var bombBullets = [];
 var score = 0;
+var groundHeight = 25;
 
 //fps
 var dt;
@@ -144,7 +145,7 @@ function update() {
 	        bullet.vx *= -1;
 	        bullet.bounces--;
 	    }
-	    if (bullet.y < 0 || bullet.y > SCREEN_HEIGHT) {
+	    if (bullet.y < 0 || bullet.y > SCREEN_HEIGHT - groundHeight) {
 	        bullet.vy *= -1;
 	        bullet.bounces--;
 	    }
@@ -178,7 +179,7 @@ function draw(){
 
 	//Ground
 	ctx.fillStyle = "#cdcdcd";
-	ctx.fillRect(0, SCREEN_HEIGHT - 25, SCREEN_WIDTH, 25);
+	ctx.fillRect(0, SCREEN_HEIGHT - 25, SCREEN_WIDTH, groundHeight);
 
     //Bullet
 	if (bullet && bullet.active) {
