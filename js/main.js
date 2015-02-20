@@ -8,6 +8,7 @@ var targetX;
 var targetY;
 var bombs = [];
 var bombBullets = [];
+var score = 0;
 
 //fps
 var dt;
@@ -27,6 +28,7 @@ function onCanvasClick(e){
 	var mag = Math.sqrt(dx * dx + dy * dy);
 	while (!bullet.active) {
 	    bullet = new Bullet(true, player.x + player.width / 2, player.y + player.height / 2, 700, dx / mag, dy / mag);
+	    score++;
 	}
 }
 
@@ -196,6 +198,9 @@ function draw(){
 	for (var i = 0; i < bombBullets.length; i++) {
 	    bombBullets[i].draw(ctx);
 	}
+
+    //Score
+	drawText("Shots Taken: " + score, 20, 20, 16, "#ddd");
 }
 
 function collisionTest(a, b) {
@@ -217,4 +222,10 @@ function calculateDeltaTime() {
     fps = Math.max(fps, Math.min(12, 60));
     this.lastTime = now;
     return 1 / fps;
+}
+
+function drawText(string, x, y, size, color) {
+    ctx.font = 'bold ' + size + 'px Monospace';
+    ctx.fillStyle = color;
+    ctx.fillText(string, x, y);
 }
