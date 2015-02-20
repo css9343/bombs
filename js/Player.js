@@ -38,7 +38,7 @@ window.Player = (function(){
 		ctx.strokeStyle = "red";
 		ctx.beginPath();
 		ctx.moveTo(this.x + this.width/2, this.y + this.height/2);
-		ctx.lineTo(xTo, yTo);
+	    ctx.lineTo(xTo, yTo);;
 		ctx.stroke();
 		ctx.restore();
 	}

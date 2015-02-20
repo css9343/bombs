@@ -26,6 +26,7 @@ window.Bomb = (function(){
         ctx.strokeStyle = "black";
         var vert = this.x + this.width / 2;
         var hori = this.y + this.height / 2;
+        ctx.beginPath();
         if (this.type == 0 || this.type == 2) {
             ctx.moveTo(vert, this.y);
             ctx.lineTo(vert, this.y + this.height);
@@ -38,8 +39,8 @@ window.Bomb = (function(){
             ctx.moveTo(this.x + this.width, this.y);
             ctx.lineTo(this.x, this.y + this.height);
         }
-        ctx.stroke();
         ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.stroke();
         ctx.restore();
     };
 

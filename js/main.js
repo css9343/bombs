@@ -175,9 +175,6 @@ function draw(){
 	ctx.fillStyle = "#2e2e2e";
 	ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	//Player
-	player.display(ctx);
-	player.drawGun(ctx, targetX, targetY);
 
 	//Ground
 	ctx.fillStyle = "#cdcdcd";
@@ -198,6 +195,9 @@ function draw(){
 	for (var i = 0; i < bombBullets.length; i++) {
 	    bombBullets[i].draw(ctx);
 	}
+    //Player
+	player.display(ctx);
+	player.drawGun(ctx, targetX, targetY);
 
     //Score
 	drawText("Shots Taken: " + score, 20, 20, 16, "#ddd");
