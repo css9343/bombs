@@ -78,11 +78,31 @@ function init(){
 	bullet = new Bullet(0, 0, 0, 0, 0);
 	bullet.active = false;
 
-    //Crappy first level
-	bombs.push(new Bomb(760, 450));
-	bombs.push(new Bomb(20, 450));
-	bombs.push(new Bomb(20, 40));
-	bombs.push(new Bomb(412, 350));
+    ////Crappy first level
+	//bombs.push(new Bomb(0, 760, 450));
+	//bombs.push(new Bomb(0, 20, 450));
+	//bombs.push(new Bomb(0, 20, 40));
+	//bombs.push(new Bomb(0, 412, 350));
+
+	//for (var i = 0; i < 8; i++) {
+	//    for (var j = 0; j < 6; j++) {
+	//        var x = 80 + 90 * i;
+	//        var y = 20 + 90 * j;
+	//        bombs.push(new Bomb(2, x, y));
+	//    }
+    //}
+
+	bombs.push(new Bomb(2, 260, 20));
+	bombs.push(new Bomb(1, 710, 20));
+	bombs.push(new Bomb(0, 440, 110));
+	bombs.push(new Bomb(0, 620, 110));
+	bombs.push(new Bomb(0, 350, 200));
+	bombs.push(new Bomb(0, 440, 200));
+	bombs.push(new Bomb(0, 530, 200));
+	bombs.push(new Bomb(0, 80, 290));
+	bombs.push(new Bomb(0, 530, 290));
+	bombs.push(new Bomb(0, 170, 380));
+	bombs.push(new Bomb(0, 260, 380));
 }
 
 function getPosition(event, canvas){
