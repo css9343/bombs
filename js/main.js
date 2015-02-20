@@ -21,12 +21,12 @@ $(document).ready(function(){
 //Handle canvas click events
 function onCanvasClick(e){
 	var clickPos = getPosition(e, canvasElement);
-	console.log(clickPos);
-	var dx = clickPos[0] - player.x;
-	var dy = clickPos[1] - player.y;
+	//console.log(clickPos);
+	var dx = clickPos[0] - player.x - player.width / 2;
+	var dy = clickPos[1] - player.y - player.height / 2;
 	var mag = Math.sqrt(dx * dx + dy * dy);
 	while (!bullet.active) {
-	    bullet = new Bullet(player.x + player.width / 2, player.y, 500, dx / mag, dy / mag);
+	    bullet = new Bullet(true, player.x + player.width / 2, player.y + player.height / 2, 700, dx / mag, dy / mag);
 	}
 }
 
@@ -179,10 +179,10 @@ function draw(){
 }
 
 function collisionTest(a, b) {
-    var ax = a.x - a.width / 2;
-    var ay = a.y - a.height / 2;
-    var bx = b.x - b.width / 2;
-    var by = b.y - b.height / 2;
+    var ax = a.x;
+    var ay = a.y;
+    var bx = b.x + b.width / 2;
+    var by = b.y + b.height / 2;
 
     return ax < bx + b.width &&
             ax + a.width > bx &&

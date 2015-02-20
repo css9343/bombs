@@ -2,14 +2,19 @@
 
 window.Bullet = (function(){
 
-    function Bullet(x, y, speed, vx, vy) {
+    function Bullet(player, x, y, speed, vx, vy) {
         this.x = x;
         this.y = y;
         this.active = true;
         this.speed = speed;
         this.width = 3;
         this.height = 3;
-        this.color = "#fff";
+        if (player) {
+            this.color = "#fff";
+        }
+        else {
+            this.color = "#FF0000";
+        }
         this.vx = vx;
         this.vy = vy;
         this.bounces = 4;

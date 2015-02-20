@@ -23,10 +23,10 @@ window.Bomb = (function(){
     };
 
     p.explode = function (bombBullets) {
-        bombBullets.push(new Bullet(this.x + this.width / 2, this.y + this.height / 2, 300, 0, 1));
-        bombBullets.push(new Bullet(this.x + this.width / 2, this.y + this.height / 2, 300, 0, -1));
-        bombBullets.push(new Bullet(this.x + this.width / 2, this.y + this.height / 2, 300, 1, 0));
-        bombBullets.push(new Bullet(this.x + this.width / 2, this.y + this.height / 2, 300, -1, 0));
+        bombBullets.push(new Bullet(false, this.x + this.width / 2, this.y + this.height / 2, 600, 0, 1));
+        bombBullets.push(new Bullet(false, this.x + this.width / 2, this.y + this.height / 2, 600, 0, -1));
+        bombBullets.push(new Bullet(false, this.x + this.width / 2, this.y + this.height / 2, 600, 1, 0));
+        bombBullets.push(new Bullet(false, this.x + this.width / 2, this.y + this.height / 2, 600, -1, 0));
         this.active = false;
     }
     return Bomb;
