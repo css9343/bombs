@@ -31,8 +31,10 @@ window.Bullet = (function(){
     };
 
     p.draw = function (ctx) {
+        ctx.save();
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.restore();
     };
 	return Bullet;
 }());

@@ -8,6 +8,7 @@ var targetX;
 var targetY;
 var bombs = [];
 var bombBullets = [];
+var platforms = [];
 var score = 0;
 var groundHeight = 25;
 
@@ -95,6 +96,8 @@ function init(){
 	//    }
     //}
 
+    platforms.push(new Platform(50, 50, 150, 20));
+
 	bombs.push(new Bomb(2, 260, 20));
 	bombs.push(new Bomb(1, 710, 20));
 	bombs.push(new Bomb(0, 440, 110));
@@ -173,13 +176,17 @@ function update() {
 
 function draw(){
 	//Background
+	ctx.save();
 	ctx.fillStyle = "#2e2e2e";
 	ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	ctx.restore();
 
 
 	//Ground
+	ctx.save();
 	ctx.fillStyle = "#cdcdcd";
 	ctx.fillRect(0, SCREEN_HEIGHT - 25, SCREEN_WIDTH, groundHeight);
+	ctx.restore();
 
     //Bullet
 	if (bullet && bullet.active) {
@@ -192,10 +199,17 @@ function draw(){
 	        bombs[i].draw(ctx);
 	    }
 	}
+
     //Bomb bullets
 	for (var i = 0; i < bombBullets.length; i++) {
 	    bombBullets[i].draw(ctx);
 	}
+
+	//Platforms
+	for(var i = 0; i < platforms.length; i++){
+		platforms[i].draw(ctx);
+	}
+
     //Player
 	player.display(ctx);
 	player.drawGun(ctx, targetX, targetY);
