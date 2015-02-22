@@ -96,7 +96,8 @@ function init(){
 	//    }
     //}
 
-    platforms.push(new Platform(50, 50, 150, 20));
+    platforms.push(new Platform(100, 50, 150, 20));
+    platforms.push(new Platform(SCREEN_WIDTH - 150, 100, 150, 20));
 
 	bombs.push(new Bomb(2, 260, 20));
 	bombs.push(new Bomb(1, 710, 20));
@@ -171,6 +172,11 @@ function update() {
 	            bomb.explode(bombBullets);
 	        }
 	    });
+	});
+
+	//Platform collision
+	platforms.forEach(function(p){
+		p.bulletHit(bullet);
 	});
 }
 
