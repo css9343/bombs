@@ -361,6 +361,8 @@ function drawText(string, x, y, size, color) {
 }
 
 function stopAudio() {
-    bgmAudio.pause();
-    bgmAudio.currentTime = 0;
+    if (!bgmAudio.paused) {
+        bgmAudio.pause();
+        bgmAudio.currentTime = 0;
+    }
 }
