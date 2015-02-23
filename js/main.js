@@ -54,7 +54,9 @@ function onCanvasClick(e){
 	    currentLevel++;
 		score = 0;
 		if (currentLevel > 2) {
-		    if (localStorage.getItem('highscore') > overallScore) {
+		    console.log(localStorage.getItem('highscore'));
+		    console.log(overallScore);
+		    if (localStorage.getItem('highscore') > overallScore || localStorage.getItem('highscore') == 0) {
 		        localStorage.setItem('highscore', overallScore.toString());
 		    }
 		    gameScreen = GAMEOVER_SCREEN;
@@ -108,8 +110,7 @@ function onKeyUp(e){
 
 //Reset
 function reset() {
-    bgmAudio.pause();
-    bgmAudio.currentTime = 0;
+    stopAudio();
     bgmAudio.play();
     overallScore = 0;
 	score = 0;
@@ -169,7 +170,6 @@ function loadLevel(level) {
     platforms = [];
     player.x = levels[level]["start"][0][0];
     player.y = levels[level]["start"][0][1];
-    console.log(levels[level]["start"][0]);
 
 	//console.log(levels[level]["bombs"][0][0]);
 	for(var i = 0; i < levels[level]["bombs"].length; i++){
@@ -358,4 +358,9 @@ function drawText(string, x, y, size, color) {
     ctx.font = 'bold ' + size + 'px Monospace';
     ctx.fillStyle = color;
     ctx.fillText(string, x, y);
+}
+
+function stopAudio() {
+    bgmAudio.pause();
+    bgmAudio.currentTime = 0;
 }
