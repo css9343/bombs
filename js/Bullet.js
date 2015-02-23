@@ -9,6 +9,7 @@ window.Bullet = (function(){
         this.speed = speed;
         this.width = 3;
         this.height = 3;
+        this.player = player;
         if (player) {
             this.color = "#fff";
         }
@@ -27,6 +28,11 @@ window.Bullet = (function(){
         this.y += this.vy * this.speed * dt;
         if (this.bounces == 0) {
             this.active = false;
+        }
+        if (!this.player) {
+            if (bullet.x < 0 || bullet.x > SCREEN_WIDTH || bullet.y < 0 || bullet.y > SCREEN_HEIGHT - groundHeight) {
+                this.active = false;
+            }
         }
     };
 

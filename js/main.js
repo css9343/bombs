@@ -15,10 +15,15 @@ var bombs = [];
 var bombBullets = [];
 var platforms = [];
 var score = 0;
+var overallScore = 0;
 var groundHeight = 25;
 var gameScreen = TITLE_SCREEN;
 var maxShots = 1;
 var currentLevel = 1;
+
+var effectAudio;
+var bgmAudio;
+var explosionSound = "assets/explosion.mp3";
 
 //fps
 var dt;
@@ -41,13 +46,20 @@ function onCanvasClick(e){
 		var dy = clickPos[1] - player.y - player.height / 2;
 		var mag = Math.sqrt(dx * dx + dy * dy);
 		while (!bullet.active) {
-		    bullet = new Bullet(true, player.x + player.width / 2, player.y + player.height / 2, 700, dx / mag, dy / mag);
+		    bullet = new Bullet(true, player.x + player.width / 2, player.y + player.height / 2, 500, dx / mag, dy / mag);
 		    score++;
 		}
 	}
 	else if(gameScreen == LEVELWIN_SCREEN){
-		currentLevel++;
+	    currentLevel++;
 		score = 0;
+		if (currentLevel > 2) {
+		    if (localStorage.getItem('highscore') > overallScore) {
+		        localStorage.setItem('highscore', overallScore.toString());
+		    }
+		    gameScreen = GAMEOVER_SCREEN;
+		    return;
+		}
 		loadLevel(currentLevel);
 		gameScreen = GAME_SCREEN;
 	}
@@ -95,17 +107,27 @@ function onKeyUp(e){
 }
 
 //Reset
-function reset(){
+function reset() {
+    bgmAudio.pause();
+    bgmAudio.currentTime = 0;
+    bgmAudio.play();
+    overallScore = 0;
 	score = 0;
 	currentLevel = 1;
 	gameScreen = TITLE_SCREEN;
-	loadLevel(1);
+	loadLevel(currentLevel);
 }
 
 function init(){
 	canvasElement = document.getElementById("main-canvas");
 	ctx = canvasElement.getContext("2d");
 	
+    //Audio
+	effectAudio = document.querySelector("#effectAudio");
+	effectAudio.volume = 0.7;
+	bgmAudio = document.querySelector("#bgmAudio");
+	bgmAudio.volume = 0.5;
+
 	//Add event listeners for button clicks and key presses
 	canvasElement.addEventListener("click", onCanvasClick);
 	canvasElement.addEventListener("mousemove", onMouseMove);
@@ -113,42 +135,14 @@ function init(){
 	window.addEventListener("keyup", onKeyUp);
 
 	//Init player
-	player = new Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 65, 5);
+	player = new Player(SCREEN_WIDTH / 2 - 200, SCREEN_HEIGHT - 65, 5);
     //Offscreen bullet
 	bullet = new Bullet(0, 0, 0, 0, 0);
 	bullet.active = false;
 
 	//Load first level
-	loadLevel(1);
-
-    ////Crappy first level
-	//bombs.push(new Bomb(0, 760, 450));
-	//bombs.push(new Bomb(0, 20, 450));
-	//bombs.push(new Bomb(0, 20, 40));
-	//bombs.push(new Bomb(0, 412, 350));
-
-	//for (var i = 0; i < 8; i++) {
-	//    for (var j = 0; j < 6; j++) {
-	//        var x = 80 + 90 * i;
-	//        var y = 20 + 90 * j;
-	//        bombs.push(new Bomb(2, x, y));
-	//    }
-    //}
-
-    /*platforms.push(new Platform(100, 50, 150, 20));
-    platforms.push(new Platform(SCREEN_WIDTH - 150, 100, 150, 20));
-
-	bombs.push(new Bomb(2, 260, 20));
-	bombs.push(new Bomb(1, 710, 20));
-	bombs.push(new Bomb(0, 440, 110));
-	bombs.push(new Bomb(0, 620, 110));
-	bombs.push(new Bomb(0, 350, 200));
-	bombs.push(new Bomb(0, 440, 200));
-	bombs.push(new Bomb(0, 530, 200));
-	bombs.push(new Bomb(0, 80, 290));
-	bombs.push(new Bomb(0, 530, 290));
-	bombs.push(new Bomb(0, 170, 380));
-	bombs.push(new Bomb(0, 260, 380));*/
+    //loadLevel(currentLevel);
+	reset();
 }
 
 function getPosition(event, canvas){
@@ -168,9 +162,14 @@ function getPosition(event, canvas){
 	return [x,y];
 }
 
-function loadLevel(level){
-	bombs = [];
-	platforms = [];
+function loadLevel(level) {
+    bullet.active = false;
+    bombs = [];
+    bombBullets = [];
+    platforms = [];
+    player.x = levels[level]["start"][0][0];
+    player.y = levels[level]["start"][0][1];
+    console.log(levels[level]["start"][0]);
 
 	//console.log(levels[level]["bombs"][0][0]);
 	for(var i = 0; i < levels[level]["bombs"].length; i++){
@@ -189,6 +188,7 @@ function runGameLoop(){
 }
 
 function update() {
+    
 	if(gameScreen == GAME_SCREEN){
 	    dt = calculateDeltaTime();
 
@@ -218,21 +218,29 @@ function update() {
 	    //Collision
 		bombs.forEach(function (bomb) {
 		    if (bomb.active && collisionTest(bomb, bullet)) {
-		        //4 way explosion only for now
+		        effectAudio.src = explosionSound;
+		        effectAudio.play();
 		        bomb.explode(bombBullets);
 		    }
 		    bombBullets.forEach(function (bB) {
 		        if (bomb.active && collisionTest(bB, bomb)) {
+		            effectAudio.src = explosionSound;
+		            effectAudio.play();
 		            bomb.explode(bombBullets);
 		        }
 		    });
 		});
 
 		//Platform collision
-		platforms.forEach(function(p){
-			p.bulletHit(bullet);
+		platforms.forEach(function (p) {
+		    p.playerCollide(player);
+		    p.bulletHit(bullet);
+            //If we wanted bomb bullets to bounce off platforms
+		    //bombBullets.forEach(function (bB) {
+		    //    p.bulletHit(bB);
+		    //});
 		});
-		
+
 		//Check for level win
 		var bombActiveCount = 0;
 		bombs.forEach(function(b){
@@ -240,11 +248,9 @@ function update() {
 				bombActiveCount++;			
 		});
 
-		if(score >= maxShots && bullet.active == false){
-			if(bombActiveCount > 0)
-				gameScreen = LEVELLOSE_SCREEN;
-			else 
-				gameScreen = LEVELWIN_SCREEN;
+		if (bombActiveCount == 0) {
+		    overallScore += score;
+		    gameScreen = LEVELWIN_SCREEN;
 		}
 	}
 }
@@ -257,8 +263,9 @@ function draw(){
 	ctx.restore();
 
 	if(gameScreen == TITLE_SCREEN){
-		drawText("Bombs", SCREEN_WIDTH/2 - 50, SCREEN_HEIGHT/2, 25, "#cb0303");
-		drawText("Click to Start", SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/2 + 40, 22, "#ffffff")
+	    drawText("Bombs", SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2, 25, "#cb0303");
+	    drawText("WASD to move, Click to shoot", SCREEN_WIDTH / 2 - 170, SCREEN_HEIGHT / 2 + 40, 22, "#ffffff")
+		drawText("Click anywhere to Start", SCREEN_WIDTH/2 - 130, SCREEN_HEIGHT/2 + 60, 22, "#ffffff")
 	}
 
 	if(gameScreen == GAME_SCREEN){
@@ -296,6 +303,12 @@ function draw(){
 
 	    //Score
 		drawText("Shots Taken: " + score, 20, 20, 16, "#ddd");
+	    //Bounces
+		if (bullet.bounces - 1 >= 0) {
+		    drawText("Bounces Left: " + (bullet.bounces - 1), 20, 35, 16, "#ddd");
+		} else {
+		    drawText("Bounces Left: " + 0, 20, 35, 16, "#ddd");
+		}
 	}
 
 	if(gameScreen == LEVELWIN_SCREEN){
@@ -309,8 +322,14 @@ function draw(){
 	}
 
 	if(gameScreen == GAMEOVER_SCREEN){
-		drawText("You beat the game!", SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/2, 25, "#cb0303");
-		drawText("Click to Play Again", SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/2 + 40, 22, "#ffffff")		
+	    drawText("You beat the game!", SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2, 25, "#cb0303");
+	    if (localStorage.getItem('highscore') == null) {
+	        drawText("Previous Highscore: " + 0, SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2 + 30, 25, "#cb0303");
+	    }
+	    else {
+	        drawText("Best Score: " + localStorage.getItem('highscore'), SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2 + 30, 25, "#cb0303");
+	    }
+		drawText("Click to Play Again", SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/2 + 60, 22, "#ffffff")		
 	}
 }
 

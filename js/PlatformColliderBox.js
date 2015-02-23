@@ -16,10 +16,11 @@ window.PlatformColliderBox = (function(){
         ctx.restore();
     };
 
-    PlatformColliderBox.prototype.collide = function(bullet){
-        if(bullet.x + bullet.width > this.x && bullet.x < this.x + this.width &&
-           bullet.y + bullet.height > this.y && bullet.y < this.y + this.height)
+    PlatformColliderBox.prototype.collide = function(object){
+        if (object.x + object.width > this.x && object.x < this.x + this.width &&
+           object.y + object.height > this.y && object.y < this.y + this.height) {
             return true;
+        }
 
         return false;
     };

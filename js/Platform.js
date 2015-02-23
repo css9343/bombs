@@ -21,15 +21,31 @@ window.Platform = (function(){
         ctx.restore();
     };
 
-    Platform.prototype.bulletHit = function(bullet){
-        if(this.topBox.collide(bullet))
+    Platform.prototype.playerCollide = function (player) {
+        if (this.leftBox.collide(player)) {
+            console.log("left");
+            player.x -= 5;
+        }
+        if (this.rightBox.collide(player)) {
+            console.log("right");
+            player.x += 5;
+        }
+    };
+
+    Platform.prototype.bulletHit = function (bullet) {
+        //console.log(this.topBox.collide(bullet) + ", " + this.leftBox.collide(bullet) + ", " + this.bottomBox.collide(bullet) + ", " + this.rightBox.collide(bullet));
+        if (this.topBox.collide(bullet)) {
             bullet.vy *= -1;
-        if(this.leftBox.collide(bullet))
+        }
+        if (this.leftBox.collide(bullet)) {
             bullet.vx *= -1;
-        if(this.bottomBox.collide(bullet))
+        }
+        if (this.bottomBox.collide(bullet)) {
             bullet.vy *= -1;
-        if(this.rightBox.collide(bullet))
-            bullet.vx *= -1;                                
+        }
+        if (this.rightBox.collide(bullet)) {
+            bullet.vx *= -1;
+        }
     };
 
     return Platform;
