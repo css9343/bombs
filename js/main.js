@@ -20,6 +20,7 @@ var groundHeight = 25;
 var gameScreen = TITLE_SCREEN;
 var maxShots = 1;
 var currentLevel = 1;
+var maxLevel = 3;
 
 var effectAudio;
 var bgmAudio;
@@ -53,7 +54,7 @@ function onCanvasClick(e){
 	else if(gameScreen == LEVELWIN_SCREEN){
 	    currentLevel++;
 		score = 0;
-		if (currentLevel > 2) {
+		if (currentLevel > maxLevel) {
 		    console.log(localStorage.getItem('highscore'));
 		    console.log(overallScore);
 		    if (localStorage.getItem('highscore') > overallScore || localStorage.getItem('highscore') == 0) {
@@ -63,7 +64,10 @@ function onCanvasClick(e){
 		    return;
 		}
 		loadLevel(currentLevel);
+		bullet = new Bullet(0, 0, 0, 0, 0);
+		bullet.active = false;
 		gameScreen = GAME_SCREEN;
+		return;
 	}
 	else if(gameScreen == LEVELLOSE_SCREEN){		
 		loadLevel(currentLevel);
