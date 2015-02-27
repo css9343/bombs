@@ -225,6 +225,7 @@ function update() {
 		        effectAudio.src = explosionSound;
 		        effectAudio.play();
 		        bomb.explode(bombBullets);
+				//bullet.active = false;
 		    }
 		    bombBullets.forEach(function (bB) {
 		        if (bomb.active && collisionTest(bB, bomb)) {
@@ -372,7 +373,7 @@ function calculateDeltaTime() {
 }
 
 function drawText(string, x, y, size, color) {
-    ctx.font = 'bold ' + size + 'px Monospace';
+    ctx.font = 'bold ' + size + 'px Helvetica';
     ctx.fillStyle = color;
     ctx.fillText(string, x, y);
 }
