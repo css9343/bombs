@@ -14,7 +14,7 @@ window.Bullet = (function(){
             this.color = "#fff";
         }
         else {
-            this.color = "#FF0000";
+            this.color = "#FFE100";
         }
         this.vx = vx;
         this.vy = vy;

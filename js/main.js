@@ -240,9 +240,9 @@ function update() {
 		    p.playerCollide(player);
 		    p.bulletHit(bullet);
             //If we wanted bomb bullets to bounce off platforms
-		    //bombBullets.forEach(function (bB) {
-		    //    p.bulletHit(bB);
-		    //});
+		    bombBullets.forEach(function (bB) {
+		        p.bulletHit(bB);
+		    });
 		});
 
 		//Check for level win
@@ -253,8 +253,21 @@ function update() {
 		});
 
 		if (bombActiveCount == 0) {
-		    overallScore += score;
-		    gameScreen = LEVELWIN_SCREEN;
+		    //overallScore += score;
+			//gameScreen = LEVELWIN_SCREEN;
+		}
+		
+		var bbActive = 0;
+		if(bombBullets.length > 0){
+			bombBullets.forEach(function(bb){
+				if(bb.active)
+					bbActive++;
+			});		
+		}
+		
+		if(bombActiveCount == 0 && bbActive == 0){
+			overallScore += score;
+			gameScreen = LEVELWIN_SCREEN;
 		}
 	}
 }
