@@ -20,11 +20,16 @@ var groundHeight = 25;
 var gameScreen = TITLE_SCREEN;
 var maxShots = 1;
 var currentLevel = 1;
-var maxLevel = 3;
+var maxLevel = 6;
 
 var effectAudio;
 var bgmAudio;
 var explosionSound = "assets/explosion.mp3";
+
+//Screen flash
+var flashAlpha = 0.0;
+var flashGreyScale = 185;
+var flashMax = 0.70;
 
 //fps
 var dt;
@@ -40,6 +45,7 @@ function onCanvasClick(e){
 	var clickPos = getPosition(e, canvasElement);
 	//console.log(clickPos);
 	if(gameScreen == TITLE_SCREEN){
+		flashAlpha = 0.0;
 		gameScreen = GAME_SCREEN;
 	}
 	else if(gameScreen == GAME_SCREEN){
@@ -47,7 +53,7 @@ function onCanvasClick(e){
 		var dy = clickPos[1] - player.y - player.height / 2;
 		var mag = Math.sqrt(dx * dx + dy * dy);
 		while (!bullet.active) {
-		    bullet = new Bullet(true, player.x + player.width / 2, player.y + player.height / 2, 500, dx / mag, dy / mag);
+		    bullet = new Bullet(true, player.x + player.width / 2, player.y + player.height / 2, 700, dx / mag, dy / mag);
 		    score++;
 		}
 	}
@@ -66,12 +72,14 @@ function onCanvasClick(e){
 		loadLevel(currentLevel);
 		bullet = new Bullet(0, 0, 0, 0, 0);
 		bullet.active = false;
+		flashAlpha = 0.0;
 		gameScreen = GAME_SCREEN;
 		return;
 	}
 	else if(gameScreen == LEVELLOSE_SCREEN){		
 		loadLevel(currentLevel);
 		score = 0;
+		flashAlpha = 0.0;
 		gameScreen = GAME_SCREEN;
 	}
 	else if(gameScreen == GAMEOVER_SCREEN){
@@ -206,10 +214,12 @@ function update() {
 		    if (bullet.x < 0 || bullet.x > SCREEN_WIDTH) {
 		        bullet.vx *= -1;
 		        bullet.bounces--;
+		        flashAlpha = flashMax;
 		    }
 		    if (bullet.y < 0 || bullet.y > SCREEN_HEIGHT - groundHeight) {
 		        bullet.vy *= -1;
 		        bullet.bounces--;
+		        flashAlpha = flashMax;
 		    }
 		    bullet.update(dt);
 		}
@@ -270,6 +280,10 @@ function update() {
 			overallScore += score;
 			gameScreen = LEVELWIN_SCREEN;
 		}
+
+		//Explosion flash
+		if(flashAlpha > 0)
+			flashAlpha -= 0.1;
 	}
 }
 
@@ -327,6 +341,19 @@ function draw(){
 		} else {
 		    drawText("Bounces Left: " + 0, 20, 35, 16, "#ddd");
 		}
+
+		//Draw bullet bounce flash
+		ctx.save();
+		//Screen flash
+		//ctx.fillStyle = "rgba(" + flashGreyScale + ", " + flashGreyScale + ", " + flashGreyScale + ", " + flashAlpha + ")";		
+		//ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - groundHeight);
+
+		//Border flash
+		ctx.strokeStyle = "rgba(255, 0, 0, " + flashAlpha + ")";
+		ctx.lineWidth = 15;
+		ctx.strokeRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - groundHeight);
+
+		ctx.restore();
 	}
 
 	if(gameScreen == LEVELWIN_SCREEN){

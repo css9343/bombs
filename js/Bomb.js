@@ -5,13 +5,19 @@ window.Bomb = (function(){
     function Bomb(type, x, y) {
         this.x = x;
         this.y = y;
-        this.width = 20;
-        this.height = 20;
-        this.color = "#FF0000";
+        this.width = 30;
+        this.height = 30;       
         this.active = true;
         //Type: 0, 1, 2
         //0 = cardinal, 1 = diag, 2 = 8way
         this.type = type;
+
+        if(type == 0)
+            this.color = "#4D4FFF";
+        else if(type == 1)
+            this.color = "#00E804";
+        else if(type == 2)
+            this.color = "#FF0000";
     }
 
     var p = Bomb.prototype;
