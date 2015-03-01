@@ -61,9 +61,9 @@ function onCanvasClick(e){
 	    currentLevel++;
 		score = 0;
 		if (currentLevel > maxLevel) {
-		    console.log(localStorage.getItem('highscore'));
-		    console.log(overallScore);
-		    if (localStorage.getItem('highscore') > overallScore || localStorage.getItem('highscore') == 0) {
+		    //console.log(localStorage.getItem('highscore'));
+		    //console.log(overallScore);
+		    if (localStorage.getItem('highscore') > overallScore || localStorage.getItem('highscore') == 0 || localStorage.getItem('highscore') == null) {
 		        localStorage.setItem('highscore', overallScore.toString());
 		    }
 		    gameScreen = GAMEOVER_SCREEN;
@@ -235,7 +235,7 @@ function update() {
 		        effectAudio.src = explosionSound;
 		        effectAudio.play();
 		        bomb.explode(bombBullets);
-				//bullet.active = false;
+				bullet.active = false;
 		    }
 		    bombBullets.forEach(function (bB) {
 		        if (bomb.active && collisionTest(bB, bomb)) {

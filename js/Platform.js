@@ -23,11 +23,9 @@ window.Platform = (function(){
 
     Platform.prototype.playerCollide = function (player) {
         if (this.leftBox.collide(player)) {
-            console.log("left");
             player.x -= 5;
         }
         if (this.rightBox.collide(player)) {
-            console.log("right");
             player.x += 5;
         }
     };

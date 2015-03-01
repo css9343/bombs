@@ -30,7 +30,7 @@ window.Bullet = (function(){
             this.active = false;
         }
         if (!this.player) {
-            if (bullet.x < 0 || bullet.x > SCREEN_WIDTH || bullet.y < 0 || bullet.y > SCREEN_HEIGHT - groundHeight) {
+            if (this.x < 0 || this.x > SCREEN_WIDTH || this.y < 0 || this.y > SCREEN_HEIGHT - groundHeight) {
                 this.active = false;
             }
         }
