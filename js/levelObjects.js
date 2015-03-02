@@ -1,8 +1,9 @@
 var levels = [];
-var levelCount = 6;
+var levelCount = 1;
 for(var i = 1; i < levelCount + 1; i++){
     levels[i] = [];
 }
+
 
 //Level 1
 levels[1]["start"] = [[400, 535]];
