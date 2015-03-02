@@ -276,7 +276,7 @@ function update() {
 			});		
 		}
 		
-		if(bombActiveCount == 0 && bbActive == 0 && bullet.active == false){
+		if(bombActiveCount == 0 && bbActive == 0){
 			overallScore += score;
 			gameScreen = LEVELWIN_SCREEN;
 		}
